@@ -1,0 +1,3 @@
+[submodule "pythondata_cpu_blackparrot/system_verilog/black-parrot"]
+	path = pythondata_cpu_blackparrot/system_verilog/black-parrot
+	url = https://github.com/black-parrot/black-parrot.git
