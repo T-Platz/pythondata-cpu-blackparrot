@@ -17,7 +17,6 @@ module ExampleBlackParrotSystem
   import bsg_noc_pkg::*;
   #(parameter bp_params_e bp_params_p = e_bp_default_cfg
     `declare_bp_proc_params(bp_params_p)
-    //`declare_bp_core_if_widths(vaddr_width_p, paddr_width_p, asid_width_p, branch_metadata_fwd_width_p)
     `declare_bp_bedrock_mem_if_widths(paddr_width_p, did_width_p, lce_id_width_p, lce_assoc_p)
 
     , parameter  boot_pc_p = 32'h7000_0000
@@ -55,17 +54,17 @@ module ExampleBlackParrotSystem
    , input  [data_width_p-1:0]        m01_dat_i
 
    // Wishbone clint
-  //  , input  [wbone_addr_width_lp-1:0] c00_adr_i
-  //  , input  [data_width_p-1:0]        c00_dat_i
-  //  , input                            c00_cyc_i
-  //  , input                            c00_stb_i
-  //  , input  [bus_bytes_lp-1:0]        c00_sel_i
-  //  , input                            c00_we_i
-  //  , input  [2:0]                     c00_cti_i
-  //  , input  [1:0]                     c00_bte_i
-  //  , output                           c00_ack_o
-  //  , output                           c00_err_o
-  //  , output [data_width_p-1:0]        c00_dat_o
+   , input  [wbone_addr_width_lp-1:0] c00_adr_i
+   , input  [data_width_p-1:0]        c00_dat_i
+   , input                            c00_cyc_i
+   , input                            c00_stb_i
+   , input  [bus_bytes_lp-1:0]        c00_sel_i
+   , input                            c00_we_i
+   , input  [2:0]                     c00_cti_i
+   , input  [1:0]                     c00_bte_i
+   , output                           c00_ack_o
+   , output                           c00_err_o
+   , output [data_width_p-1:0]        c00_dat_o
   );
 
   `declare_bp_bedrock_mem_if(paddr_width_p, did_width_p, lce_id_width_p, lce_assoc_p);
@@ -78,8 +77,8 @@ module ExampleBlackParrotSystem
   end
 
   /*
-  * unicore_lite
-  */
+   * unicore_lite
+   */
   wire [1:0][mem_fwd_header_width_lp-1:0] proc_mem_fwd_header_lo;
   wire [1:0][uce_fill_width_p-1:0] proc_mem_fwd_data_lo;
   wire [1:0] proc_mem_fwd_v_lo;
@@ -140,8 +139,8 @@ module ExampleBlackParrotSystem
     );
 
   /*
-  * unicore_lite I$ -> WB
-  */
+   * unicore_lite I$ -> WB
+   */
   bp_me_wb_master
     #(.bp_params_p(bp_params_p)
      ,.data_width_p(data_width_p)
@@ -176,8 +175,8 @@ module ExampleBlackParrotSystem
     );
 
   /*
-  * unicore_lite D$ -> WB
-  */
+   * unicore_lite D$ -> WB
+   */
   bp_me_wb_master
     #(.bp_params_p(bp_params_p)
      ,.data_width_p(uce_fill_width_p)
@@ -284,85 +283,83 @@ module ExampleBlackParrotSystem
       );*/
 
   /*
-  * clint
-  */
-  // wire [mem_fwd_header_width_lp-1:0] clint_mem_fwd_header_li;
-  // wire [uce_fill_width_p-1:0] clint_mem_fwd_data_li;
-  // wire clint_mem_fwd_v_li;
-  // wire clint_mem_fwd_ready_and_lo;
-  // wire clint_mem_fwd_last_li;
+   * clint
+   */
+  wire [mem_fwd_header_width_lp-1:0] clint_mem_fwd_header_li;
+  wire [uce_fill_width_p-1:0] clint_mem_fwd_data_li;
+  wire clint_mem_fwd_v_li;
+  wire clint_mem_fwd_ready_and_lo;
+  wire clint_mem_fwd_last_li;
 
-  // wire [mem_fwd_header_width_lp-1:0] clint_mem_rev_header_lo;
-  // wire [uce_fill_width_p-1:0] clint_mem_rev_data_lo;
-  // wire clint_mem_rev_v_lo;
-  // wire clint_mem_rev_ready_and_li;
-  // wire clint_mem_rev_last_lo;
+  wire [mem_fwd_header_width_lp-1:0] clint_mem_rev_header_lo;
+  wire [uce_fill_width_p-1:0] clint_mem_rev_data_lo;
+  wire clint_mem_rev_v_lo;
+  wire clint_mem_rev_ready_and_li;
+  wire clint_mem_rev_last_lo;
 
-  // bp_me_clint_slice
-  //   #(.bp_params_p(bp_params_p)
-  //    ,.data_width_p(data_width_p)
-  //   )
-  //   clint
-  //   ( .clk_i(clk_i)
-  //    ,.rt_clk_i(0)
-  //    ,.reset_i(reset_i)
-  //    ,.cfg_bus_i(cfg_bus_lo)
+  bp_me_clint_slice
+    #(.bp_params_p(bp_params_p))
+    clint
+    ( .clk_i(clk_i)
+     ,.rt_clk_i(0)
+     ,.reset_i(reset_i)
+     ,.cfg_bus_i(cfg_bus_lo)
 
-  //    ,.mem_fwd_header_i(clint_mem_fwd_header_li)
-  //    ,.mem_fwd_data_i(clint_mem_fwd_data_li)
-  //    ,.mem_fwd_v_i(clint_mem_fwd_v_li)
-  //    ,.mem_fwd_ready_and_o(clint_mem_fwd_ready_and_lo)
-  //    ,.mem_fwd_last_i(clint_mem_fwd_last_li)
+     ,.mem_fwd_header_i(clint_mem_fwd_header_li)
+     ,.mem_fwd_data_i(clint_mem_fwd_data_li)
+     ,.mem_fwd_v_i(clint_mem_fwd_v_li)
+     ,.mem_fwd_ready_and_o(clint_mem_fwd_ready_and_lo)
+     ,.mem_fwd_last_i(clint_mem_fwd_last_li)
 
-  //    ,.mem_rev_header_o(clint_mem_rev_header_lo)
-  //    ,.mem_rev_data_o(clint_mem_rev_data_lo)
-  //    ,.mem_rev_v_o(clint_mem_rev_v_lo)
-  //    ,.mem_rev_ready_and_i(clint_mem_rev_ready_and_li)
-  //    ,.mem_rev_last_o(clint_mem_rev_last_lo)
+     ,.mem_rev_header_o(clint_mem_rev_header_lo)
+     ,.mem_rev_data_o(clint_mem_rev_data_lo)
+     ,.mem_rev_v_o(clint_mem_rev_v_lo)
+     ,.mem_rev_ready_and_i(clint_mem_rev_ready_and_li)
+     ,.mem_rev_last_o(clint_mem_rev_last_lo)
 
-  //    ,.debug_irq_o(debug_irq_li)
-  //    ,.timer_irq_o(timer_irq_li)
-  //    ,.software_irq_o(software_irq_li)
-  //    ,.m_external_irq_o(m_external_irq_li)
-  //    ,.s_external_irq_o(s_external_irq_li)
-  //   );
+     ,.debug_irq_o(debug_irq_li)
+     ,.timer_irq_o(timer_irq_li)
+     ,.software_irq_o(software_irq_li)
+     ,.m_external_irq_o(m_external_irq_li)
+     ,.s_external_irq_o(s_external_irq_li)
+    );
 
-  // /*
-  //  * WB -> clint
-  //  */
-  // assign c00_err_o = '0;
-  // bp_me_wb_client
-  //   #(.bp_params_p(bp_params_p)
-  //    ,.data_width_p(uce_fill_width_p)
-  //   )
-  //   bp_me_wb_clint
-  //   ( .clk_i(clk_i)
-  //    ,.reset_i(reset_i)
+  /*
+   * WB -> clint
+   */
+  assign c00_err_o = '0;
+  bp_me_wb_client
+    #(.bp_params_p(bp_params_p)
+     ,.data_width_p(uce_fill_width_p)
+    )
+    bp_me_wb_clint
+    ( .clk_i(clk_i)
+     ,.reset_i(reset_i)
 
-  //    ,.lce_id_i('0)
-  //    ,.did_i('0)
+     ,.lce_id_i('0)
+     ,.did_i('0)
 
-  //    ,.mem_fwd_header_o(clint_mem_fwd_header_li)
-  //    ,.mem_fwd_data_o(clint_mem_fwd_data_li)
-  //    ,.mem_fwd_v_o(clint_mem_fwd_v_li)
-  //    ,.mem_fwd_ready_and_i(clint_mem_fwd_ready_and_lo)
-  //    ,.mem_fwd_last_o(clint_mem_fwd_last_li)
+     ,.mem_fwd_header_o(clint_mem_fwd_header_li)
+     ,.mem_fwd_data_o(clint_mem_fwd_data_li)
+     ,.mem_fwd_v_o(clint_mem_fwd_v_li)
+     ,.mem_fwd_ready_and_i(clint_mem_fwd_ready_and_lo)
+     ,.mem_fwd_last_o(clint_mem_fwd_last_li)
 
-  //    ,.mem_rev_header_i(clint_mem_rev_header_lo)
-  //    ,.mem_rev_data_i(clint_mem_rev_data_lo)
-  //    ,.mem_rev_v_i(clint_mem_rev_v_lo)
-  //    ,.mem_rev_ready_and_o(clint_mem_rev_ready_and_li)
-  //    ,.mem_rev_last_i(clint_mem_rev_last_lo)
+     ,.mem_rev_header_i(clint_mem_rev_header_lo)
+     ,.mem_rev_data_i(clint_mem_rev_data_lo)
+     ,.mem_rev_v_i(clint_mem_rev_v_lo)
+     ,.mem_rev_ready_and_o(clint_mem_rev_ready_and_li)
+     ,.mem_rev_last_i(clint_mem_rev_last_lo)
 
-  //    ,.adr_i(c00_adr_i)
-  //    ,.dat_i(c00_dat_i)
-  //    ,.cyc_i(c00_cyc_i)
-  //    ,.stb_i(c00_stb_i)
-  //    ,.sel_i(c00_sel_i)
-  //    ,.we_i(c00_we_i)
+     ,.adr_i(c00_adr_i)
+     ,.dat_i(c00_dat_i)
+     ,.cyc_i(c00_cyc_i)
+     ,.stb_i(c00_stb_i)
+     ,.sel_i(c00_sel_i)
+     ,.we_i(c00_we_i)
 
-  //    ,.ack_o(c00_ack_o)
-  //    ,.dat_o(c00_dat_o)
-  //   );
+     ,.ack_o(c00_ack_o)
+     ,.dat_o(c00_dat_o)
+    );
 
 endmodule
