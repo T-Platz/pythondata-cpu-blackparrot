@@ -10,16 +10,18 @@
 
 `include "bp_common_defines.svh"
 `include "bp_me_defines.svh"
+`include "bsg_wb_defines.svh"
 
 module bp_me_wb_client
   import bp_common_pkg::*;
   import bp_me_pkg::*;
+  import bsg_wb_pkg::*;
   #(parameter bp_params_e bp_params_p = e_bp_default_cfg
     `declare_bp_proc_params(bp_params_p)
     `declare_bp_bedrock_mem_if_widths(paddr_width_p, did_width_p, lce_id_width_p, lce_assoc_p)
+    `declare_bsg_wb_widths(paddr_width_p, data_width_p)
 
-    , parameter  data_width_p        = dword_width_gp
-    , localparam wbone_addr_width_lp = paddr_width_p - `BSG_SAFE_CLOG2(data_width_p>>3)
+    , parameter data_width_p = dword_width_gp
   )
   (   input                                      clk_i
     , input                                      reset_i
@@ -41,7 +43,7 @@ module bp_me_wb_client
     , input                                      mem_rev_last_i
 
     // WB signals
-    , input  [wbone_addr_width_lp-1:0]           adr_i
+    , input  [wb_adr_width_lp-1:0]               adr_i
     , input  [data_width_p-1:0]                  dat_i
     , input                                      cyc_i
     , input                                      stb_i
@@ -58,7 +60,7 @@ module bp_me_wb_client
 
   // for BP, less than bus width data must be replicated
   localparam size_width_lp = `BSG_WIDTH(`BSG_SAFE_CLOG2(data_width_p>>3));
-  wire [size_width_lp-1:0] cmd_size_lo = msg_size;
+  wire [size_width_lp-1:0] cmd_size = msg_size;
   bsg_bus_pack
     #(
       .in_width_p(data_width_p)
@@ -66,7 +68,7 @@ module bp_me_wb_client
     bus_pack(
       .data_i(dat_i)
      ,.sel_i('0)
-     ,.size_i(cmd_size_lo)
+     ,.size_i(cmd_size)
      ,.data_o(mem_fwd_data_o)
     );
 

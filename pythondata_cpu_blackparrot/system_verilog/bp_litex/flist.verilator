@@ -331,6 +331,8 @@ $BP_COMMON_DIR/src/v/bsg_rom_param.v
 $BP_COMMON_DIR/src/v/bsg_edge_extend.v
 
 # LiteX
++incdir+$BP_LITEX_DIR/
+$BP_LITEX_DIR/bsg_wb_pkg.sv
 $BP_LITEX_DIR/bp_me_wb_master.sv
 $BP_LITEX_DIR/bp_me_wb_client.sv
 $BP_LITEX_DIR/simulation/ExampleBlackParrotSystem.v
