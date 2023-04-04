@@ -9,62 +9,63 @@
 
 `include "bp_common_defines.svh"
 `include "bp_me_defines.svh"
+`include "bsg_wb_defines.svh"
 
 module ExampleBlackParrotSystem
   import bp_common_pkg::*;
   import bp_be_pkg::*;
   import bp_me_pkg::*;
   import bsg_noc_pkg::*;
+  import bsg_wb_pkg::*;
   #(parameter bp_params_e bp_params_p = e_bp_default_cfg
     `declare_bp_proc_params(bp_params_p)
     `declare_bp_bedrock_mem_if_widths(paddr_width_p, did_width_p, lce_id_width_p, lce_assoc_p)
+    `declare_bsg_wb_widths(paddr_width_p, data_width_p)
 
-    , parameter  boot_pc_p = 32'h7000_0000
-    , parameter  data_width_p        = dword_width_gp
-    , localparam bus_bytes_lp        = data_width_p >> 3
-    , localparam wbone_addr_width_lp = paddr_width_p - `BSG_SAFE_CLOG2(bus_bytes_lp)
+    , parameter  boot_pc_p    = 32'h7000_0000
+    , parameter  data_width_p = dword_width_gp
   )
   (  input clk_i
    , input reset_i
 
    // Wishbone ibus
-   , output [wbone_addr_width_lp-1:0] m00_adr_o
-   , output [data_width_p-1:0]        m00_dat_o
-   , output                           m00_cyc_o
-   , output                           m00_stb_o
-   , output [bus_bytes_lp-1:0]        m00_sel_o
-   , output                           m00_we_o
-   , output [2:0]                     m00_cti_o
-   , output [1:0]                     m00_bte_o
-   , input                            m00_ack_i
-   , input                            m00_err_i
-   , input  [data_width_p-1:0]        m00_dat_i
+   , output [wb_adr_width_lp-1:0] m00_adr_o
+   , output [data_width_p-1:0]    m00_dat_o
+   , output                       m00_cyc_o
+   , output                       m00_stb_o
+   , output [wb_sel_width_lp-1:0] m00_sel_o
+   , output                       m00_we_o
+   , output [2:0]                 m00_cti_o
+   , output [1:0]                 m00_bte_o
+   , input                        m00_ack_i
+   , input                        m00_err_i
+   , input  [data_width_p-1:0]    m00_dat_i
 
    // Wishbone dbus
-   , output [wbone_addr_width_lp-1:0] m01_adr_o
-   , output [data_width_p-1:0]        m01_dat_o
-   , output                           m01_cyc_o
-   , output                           m01_stb_o
-   , output [bus_bytes_lp-1:0]        m01_sel_o
-   , output                           m01_we_o
-   , output [2:0]                     m01_cti_o
-   , output [1:0]                     m01_bte_o
-   , input                            m01_ack_i
-   , input                            m01_err_i
-   , input  [data_width_p-1:0]        m01_dat_i
+   , output [wb_adr_width_lp-1:0] m01_adr_o
+   , output [data_width_p-1:0]    m01_dat_o
+   , output                       m01_cyc_o
+   , output                       m01_stb_o
+   , output [wb_sel_width_lp-1:0] m01_sel_o
+   , output                       m01_we_o
+   , output [2:0]                 m01_cti_o
+   , output [1:0]                 m01_bte_o
+   , input                        m01_ack_i
+   , input                        m01_err_i
+   , input  [data_width_p-1:0]    m01_dat_i
 
    // Wishbone clint
-   , input  [wbone_addr_width_lp-1:0] c00_adr_i
-   , input  [data_width_p-1:0]        c00_dat_i
-   , input                            c00_cyc_i
-   , input                            c00_stb_i
-   , input  [bus_bytes_lp-1:0]        c00_sel_i
-   , input                            c00_we_i
-   , input  [2:0]                     c00_cti_i
-   , input  [1:0]                     c00_bte_i
-   , output                           c00_ack_o
-   , output                           c00_err_o
-   , output [data_width_p-1:0]        c00_dat_o
+   , input  [wb_adr_width_lp-1:0] c00_adr_i
+   , input  [data_width_p-1:0]    c00_dat_i
+   , input                        c00_cyc_i
+   , input                        c00_stb_i
+   , input  [wb_sel_width_lp-1:0] c00_sel_i
+   , input                        c00_we_i
+   , input  [2:0]                 c00_cti_i
+   , input  [1:0]                 c00_bte_i
+   , output                       c00_ack_o
+   , output                       c00_err_o
+   , output [data_width_p-1:0]    c00_dat_o
   );
 
   `declare_bp_bedrock_mem_if(paddr_width_p, did_width_p, lce_id_width_p, lce_assoc_p);
