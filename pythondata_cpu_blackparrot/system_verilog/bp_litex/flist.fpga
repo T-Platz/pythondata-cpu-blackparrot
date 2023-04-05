@@ -336,4 +336,4 @@ $BP_COMMON_DIR/src/v/bsg_edge_extend.v
 $BP_LITEX_DIR/bsg_wb_pkg.sv
 $BP_LITEX_DIR/bp_me_wb_master.sv
 $BP_LITEX_DIR/bp_me_wb_client.sv
-$BP_LITEX_DIR/simulation/ExampleBlackParrotSystem.v
+$BP_LITEX_DIR/fpga/ExampleBlackParrotSystem.v
