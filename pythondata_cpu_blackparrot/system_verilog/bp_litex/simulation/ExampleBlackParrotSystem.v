@@ -22,7 +22,7 @@ module ExampleBlackParrotSystem
     `declare_bp_bedrock_mem_if_widths(paddr_width_p, did_width_p, lce_id_width_p, lce_assoc_p)
     `declare_bsg_wb_widths(paddr_width_p, data_width_p)
 
-    , parameter  boot_pc_p    = 32'h7000_0000
+    , parameter  boot_pc_p    = 32'h8000_0000
     , parameter  data_width_p = dword_width_gp
   )
   (  input clk_i
